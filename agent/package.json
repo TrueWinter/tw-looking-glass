@@ -9,6 +9,9 @@
   "author": "TrueWinter",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "is-in-subnet": "^3.1.0",
+    "is-my-ip-valid": "^1.0.0",
+    "is-valid-domain": "0.0.15"
   }
 }

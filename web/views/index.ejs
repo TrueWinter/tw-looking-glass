@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= config.ui.companyName %> Looking Glass</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="/styles.css">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/darkly/bootstrap.min.css">
+	</head>
+	<body>
+		<div class="container">
+			<h1><%= config.ui.companyName %> Looking Glass</h1>
+			<p>Email: <%= config.ui.email %></p>
+			<p>Website: <a href="<%= config.ui.website %>" target="_blank"><%= config.ui.website %></a></p>
+			<hr>
+			<div class="lg-input">
+				<form class="form-inline" id="lg-form" autocomplete="off">
+					<div class="form-group mx-2">
+						<label for="routerSelection" class="sr-only">Router</label>
+						<select class="form-control" name="router" id="routerSelection" required>
+							<% var routerSelectionI = 0; %>
+							<% config.agents.forEach(function(agent) { %>
+								<option value="<%= agent.id %>"<% if (routerSelectionI===0) { %> selected<% }; routerSelectionI++ %>><%= agent.name %></option>
+							<% }); %>
+						</select>
+					</div>
+					<div id="commandSelectionDiv" class="form-group mx-2">
+						<label for="commandSelection" class="sr-only">Router</label>
+						<select class="form-control" name="command" id="commandSelection" required>
+							<% var commandSelectionI = 0; %>
+							<% config.agents[0].allowedCommands.forEach(function(command) { %>
+								<option value="<%= command %>"<% if (commandSelectionI===0) { %> selected<% }; commandSelectionI++ %>><%= command %></option>
+							<% }); %>
+						</select>
+					</div>
+					<div id="targetDiv" class="form-group mx-2">
+						<label for="target" class="sr-only">Target</label>
+						<input type="text" class="form-control" name="target" id="target" placeholder="Target" required>
+					</div>
+					<button id="submitBtn" type="submit" class="btn btn-primary mx-2">Run Test</button>
+				</form>
+			</div>
+			<hr>
+			<div class="lg-output">
+				Looking glass output here
+				<hr>
+			</div>
+			<div class="footer">
+				<% // Please don't remove the credit notice in the footer. You may ADD your name in here if you modify the code, but do not remove my name %>
+				<p>Looking Glass made by <a href="https://truewinter.dev" target="_blank">TrueWinter</a>. Source code available on <a href="https://github.com/TrueWinter/tw-looking-glass">GitHub</a>.</p>
+			</div>
+		</div>
+		<script>
+			<% var agents = {}; %>
+			<% config.agents.forEach(function(agent) { %>
+			<% var tmpRouter = {}; %>
+			<% tmpRouter.name = agent.name; %>
+			<% tmpRouter.allowedCommands = agent.allowedCommands; %>
+			<% agents[agent.id] = tmpRouter; %>
+			<% }); %>
+			var routers = <%- JSON.stringify(agents) %>;
+
+			function isValidDomain(domain) { 
+				var re = new RegExp(/^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z0-9]{2,})+$/);
+				return domain.match(re) !== null;
+			}
+
+			window.addEventListener('load', function() {
+				$('#routerSelection').on('change', function() {
+					$('#commandSelection').empty()
+					routers[$('#routerSelection').val()].allowedCommands.forEach(function(command) {
+						$('#commandSelection').append($("<option></option>").attr("value", command).text(command));
+					});
+				});
+
+				$('#lg-form').on('submit', function(e) {
+					e.preventDefault();
+					var ipVersion = 0;
+					
+					if (isInSubnet.isIPv4($('#target').val())) {
+						if ($('#commandSelection').val().charAt($('#commandSelection').val().length - 1) != 4) {
+							return alert('Please use one of the IPv4 commands');
+						}
+						ipVersion = 4;
+					} else if (isInSubnet.isIPv6($('#target').val())) {
+						if ($('#commandSelection').val().charAt($('#commandSelection').val().length - 1) != 6) {
+							return alert('Please use one of the IPv6 commands');
+						}
+						ipVersion = 6;
+					} else if (isValidDomain($('#target').val())) {
+						
+					} else {
+						return alert('Invalid domain or IP')
+					}
+
+					console.log($(this).serialize());
+				});
+			});
+		</script>
+		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	</body>
+</html>
