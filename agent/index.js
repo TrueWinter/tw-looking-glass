@@ -46,22 +46,26 @@ app.post('/', function(req, res) {
 	switch (req.body.command) {
 		case 'ping4':
 			utils.ping4(req.body.target, function(output) {
-				res.end(output);
+				var status = (output.success === true ? 200 : 500);
+				res.status(status).end(output);
 			});
 			return;
 		case 'ping6':
 			utils.ping6(req.body.target, function(output) {
-				res.end(output);
+				var status = (output.success === true ? 200 : 500);
+				res.status(status).end(output);
 			});
 			return;
 		case 'trace4':
 			utils.trace4(req.body.target, function(output) {
-				res.end(output);
+				var status = (output.success === true ? 200 : 500);
+				res.status(status).end(output);
 			});
 			return;
 		case 'trace6':
 			utils.trace6(req.body.target, function(output) {
-				res.end(output);
+				var status = (output.success === true ? 200 : 500);
+				res.status(status).end(output);
 			});
 			return;
 		default:

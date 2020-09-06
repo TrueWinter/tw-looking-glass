@@ -67,12 +67,12 @@ app.post('/process', function(req, res) {
 			return res.status(400).json({ success: false, message: 'Invalid domain or IP' });
 		}
 
-		axios.post(router.api, qs.stringify({ command: req.body.command, target: req.body.target, key: req.body.key })).then(function (response) {
+		axios.post(router.api, qs.stringify({ command: req.body.command, target: req.body.target, key: router.key })).then(function (response) {
 			console.log(response);
-			res.end(response);
+			res.end(response.data);
 		}).catch(function (error) {
 			console.log(error);
-			res.status(500).end(error);
+			res.status(500).end(error.message);
 		});
 	});
 });

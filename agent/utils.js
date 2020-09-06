@@ -3,15 +3,15 @@ function exec(command, cb) {
 	return child_process.exec(command, { timeout: 60 * 1000 }, function(err, stdout, stderr) {
 		if (err) {
 			console.log(err.message);
-			return cb(`Error while running command: ${err.message}`);
+			return cb({ success: false, message: `Error while running command: ${err.message}` });
 		}
 		if (stderr) {
 			console.log(stderr.message);
-			return cb(`Error while running command: ${stderr.message}`);
+			return cb({ success: false, message: `Error while running command: ${stderr.message}` });
 		}
 
 		console.log(stdout);
-		cb(stdout);
+		cb({ success: true, message: stdout });
 	});
 }
 
