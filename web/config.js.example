@@ -1,0 +1,16 @@
+var config = {
+	ui: {
+		companyName: '',
+		email: '',
+		website: ''
+	},
+	agents: [{
+		name: '',
+		id: '',
+		api: '',
+		key: '',
+		allowedCommands: ['ping4', 'ping6', 'trace4', 'trace6']
+	}]
+};
+
+module.exports = config;

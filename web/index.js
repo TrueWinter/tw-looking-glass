@@ -52,12 +52,12 @@ app.post('/process', function(req, res) {
 		}
 
 		if (isInSubnet.isIPv4(req.body.target)) {
-			if (req.body.command.charAt(req.body.command.length - 1) != 4) {
+			if (req.body.command.charAt(req.body.command.length - 1) !== '4') {
 				return res.status(400).json({ success: false, message: 'Please use one of the IPv4 commands' });
 			}
 			ipVersion = 4;
 		} else if (isInSubnet.isIPv6(req.body.target)) {
-			if (req.body.command.charAt(req.body.command.length - 1) != 6) {
+			if (req.body.command.charAt(req.body.command.length - 1) !== '6') {
 				return res.status(400).json({ success: false, message: 'Please use one of the IPv6 commands' });
 			}
 			ipVersion = 6;
