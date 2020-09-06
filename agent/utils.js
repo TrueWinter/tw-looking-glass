@@ -16,25 +16,25 @@ function exec(command, cb) {
 }
 
 function ping4(host, cb) {
-	exec(`ping -4 -n 4 ${host}`, function(output) {
+	exec(`ping -4 -c 4 ${host}`, function(output) {
 		cb(output);
 	});
 }
 
 function ping6(host, cb) {
-	exec(`ping -6 -n 4 ${host}`, function(output) {
+	exec(`ping -6 -c 4 ${host}`, function(output) {
 		cb(output);
 	});
 }
 
 function trace4(host, cb) {
-	exec(`tracert -4 ${host}`, function(output) {
+	exec(`traceroute -4 -w 2 -q 1 ${host}`, function(output) {
 		cb(output);
 	});
 }
 
 function trace6(host, cb) {
-	exec(`tracert -6 ${host}`, function(output) {
+	exec(`traceroute -6 -w 2 -q 1 ${host}`, function(output) {
 		cb(output);
 	});
 }
