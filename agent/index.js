@@ -2,6 +2,7 @@ var express = require('express');
 var isValidIP = require('is-my-ip-valid')();
 var isValidDomain = require('is-valid-domain');
 var isInSubnet = require('is-in-subnet');
+var morgan = require('morgan');
 
 var config = require('./config.js');
 var utils = require('./utils.js');
@@ -9,6 +10,7 @@ var utils = require('./utils.js');
 var app = express();
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(morgan('combined'));
 
 app.post('/', function(req, res) {
 	if (!(req.body.key && req.body.command && req.body.target)) {
@@ -18,8 +20,6 @@ app.post('/', function(req, res) {
 	if (req.body.key !== config.key) {
 		return res.status(400).json({ success: false, message: 'Invalid key' });
 	}
-
-	console.log(config);
 
 	var ipVersion = 0;
 
@@ -46,26 +46,22 @@ app.post('/', function(req, res) {
 	switch (req.body.command) {
 		case 'ping4':
 			utils.ping4(req.body.target, function(output) {
-				var status = (output.success === true ? 200 : 500);
-				res.status(status).json(output);
+				res.json(output);
 			});
 			return;
 		case 'ping6':
 			utils.ping6(req.body.target, function(output) {
-				var status = (output.success === true ? 200 : 500);
-				res.status(status).json(output);
+				res.json(output);
 			});
 			return;
 		case 'trace4':
 			utils.trace4(req.body.target, function(output) {
-				var status = (output.success === true ? 200 : 500);
-				res.status(status).json(output);
+				res.json(output);
 			});
 			return;
 		case 'trace6':
 			utils.trace6(req.body.target, function(output) {
-				var status = (output.success === true ? 200 : 500);
-				res.status(status).json(output);
+				res.json(output);
 			});
 			return;
 		default:

@@ -10,7 +10,6 @@ function exec(command, cb) {
 			return cb({ success: false, message: `Error while running command: ${stderr.message}` });
 		}
 
-		console.log(stdout);
 		cb({ success: true, message: stdout });
 	});
 }

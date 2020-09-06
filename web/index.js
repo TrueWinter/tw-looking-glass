@@ -6,6 +6,7 @@ var isInSubnet = require('is-in-subnet');
 var path = require('path');
 var axios = require('axios');
 var qs = require('qs');
+var morgan = require('morgan');
 
 var config = require('./config.js');
 const { json } = require('express');
@@ -15,6 +16,7 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, path.sep, 'static')));
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(morgan('combined'));
 
 app.get('/', function(req, res) {
 	res.render('index', { config });
@@ -24,7 +26,6 @@ function getRouterById(id, cb) {
 	var i = 0;
 	config.agents.forEach(function (agent) {
 		if (agent.id === id) {
-			console.log(agent);
 			return cb(null, agent);
 		} else if (config.agents.length === i + 1) {
 			var err = new Error('Router not in config');
@@ -45,7 +46,6 @@ app.post('/process', function(req, res) {
 		if (err) {
 			return res.status(400).json({ success: false, message: err.message });
 		}
-		console.log(router);
 
 		if (!router.allowedCommands.includes(req.body.command)) {
 			return res.status(400).json({ success: false, message: 'Command not allowed' });
@@ -68,11 +68,10 @@ app.post('/process', function(req, res) {
 		}
 
 		axios.post(router.api, qs.stringify({ command: req.body.command, target: req.body.target, key: router.key })).then(function (response) {
-			console.log(response);
-			res.end(response.data);
+			res.json(response.data);
 		}).catch(function (error) {
 			console.log(error);
-			res.status(500).end(error.message);
+			res.status(500).json(error.message);
 		});
 	});
 });
