@@ -43,6 +43,8 @@ app.post('/', function(req, res) {
 		return res.status(400).json({ success: false, message: 'Invalid domain or IP' });
 	}
 
+	console.log(`Running ${req.body.command}. Target: ${req.body.target}`);
+
 	switch (req.body.command) {
 		case 'ping4':
 			utils.ping4(req.body.target, function(output) {
