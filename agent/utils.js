@@ -27,13 +27,31 @@ function ping6(host, cb) {
 }
 
 function trace4(host, cb) {
-	exec(`traceroute -4 -w 2 -q 1 ${host}`, function(output) {
+	exec(`sudo traceroute -I -4 -w 2 -q 1 ${host}`, function(output) {
 		cb(output);
 	});
 }
 
 function trace6(host, cb) {
-	exec(`traceroute -6 -w 2 -q 1 ${host}`, function(output) {
+	exec(`sudo traceroute -I -6 -w 2 -q 1 ${host}`, function(output) {
+		cb(output);
+	});
+}
+
+function mtr4(host, cb) {
+	exec(`sudo mtr -4 -b -oLDRSNBAWVGJMXI -rwc10 -i 0.2 ${host}`, function(output) {
+		cb(output);
+	});
+}
+
+function mtr6(host, cb) {
+	exec(`sudo mtr -6 -b -oLDRSNBAWVGJMXI -rwc10 -i 0.2 ${host}`, function(output) {
+		cb(output);
+	});
+}
+
+function bgp(target, cb) {
+	exec(`sudo birdc -r 'show route all for ${target} primary'`, function(output) {
 		cb(output);
 	});
 }
@@ -42,3 +60,6 @@ module.exports.ping4 = ping4;
 module.exports.ping6 = ping6;
 module.exports.trace4 = trace4;
 module.exports.trace6 = trace6;
+module.exports.mtr4 = mtr4;
+module.exports.mtr6 = mtr6;
+module.exports.bgp = bgp;

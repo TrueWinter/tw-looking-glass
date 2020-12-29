@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title><%= config.ui.companyName %> Looking Glass</title>
+		<title><%= config.ui.networkName %> Looking Glass</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" href="/styles.css">
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/darkly/bootstrap.min.css">
 	</head>
 	<body>
 		<div class="container">
-			<h1><%= config.ui.companyName %> Looking Glass</h1>
+			<h1><%= config.ui.networkName %> Looking Glass</h1>
 			<p>Email: <%= config.ui.email %></p>
 			<p>Website: <a href="<%= config.ui.website %>" target="_blank"><%= config.ui.website %></a></p>
 			<hr>
@@ -33,8 +33,8 @@
 						</select>
 					</div>
 					<div id="targetDiv" class="form-group mx-2">
-						<label for="target" class="sr-only">Target</label>
-						<input type="text" class="form-control" name="target" id="target" placeholder="Target" required>
+						<label for="target" class="sr-only">IP/Domain</label>
+						<input type="text" class="form-control" name="target" id="target" placeholder="IP/Domain" required>
 					</div>
 					<button id="submitBtn" type="submit" class="btn btn-primary mx-2">Run Test</button>
 					<span id="loadSpinner" class="spinner-border text-success"></span>
@@ -74,21 +74,24 @@
 				$('#lg-form').on('submit', function(e) {
 					e.preventDefault();
 					var ipVersion = 0;
+
+					var commandRequiresSpecificIPVersion = ['4', '6'].includes($('#commandSelection').val().charAt($('#commandSelection').val().length - 1));
+					var commandDoesNotAllowsDomains = ['bgp'].includes($('#commandSelection').val());
 					
 					if (isInSubnet.isIPv4($('#target').val())) {
-						if ($('#commandSelection').val().charAt($('#commandSelection').val().length - 1) != 4) {
+						if (commandRequiresSpecificIPVersion && $('#commandSelection').val().charAt($('#commandSelection').val().length - 1) != 4) {
 							return alert('Please use one of the IPv4 commands');
 						}
 						ipVersion = 4;
 					} else if (isInSubnet.isIPv6($('#target').val())) {
-						if ($('#commandSelection').val().charAt($('#commandSelection').val().length - 1) != 6) {
+						if (commandRequiresSpecificIPVersion && $('#commandSelection').val().charAt($('#commandSelection').val().length - 1) != 6) {
 							return alert('Please use one of the IPv6 commands');
 						}
 						ipVersion = 6;
-					} else if (isValidDomain($('#target').val())) {
+					} else if (!commandDoesNotAllowsDomains && isValidDomain($('#target').val())) {
 						
 					} else {
-						return alert('Invalid domain or IP')
+						return alert('Invalid target. Please check your target again. Ping and trace commands allow IP and domain targets. The BGP command only allows IP targets.')
 					}
 
 					console.log($(this).serialize());
