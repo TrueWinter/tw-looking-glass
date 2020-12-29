@@ -50,32 +50,32 @@ app.post('/', function(req, res) {
 			utils.ping4(req.body.target, function(output) {
 				res.json(output);
 			});
-			return;
+			break;
 		case 'ping6':
 			utils.ping6(req.body.target, function(output) {
 				res.json(output);
 			});
-			return;
+			break;
 		case 'trace4':
 			utils.trace4(req.body.target, function(output) {
 				res.json(output);
 			});
-			return;
+			break;
 		case 'trace6':
 			utils.trace6(req.body.target, function(output) {
 				res.json(output);
 			});
-			return;
+			break;
 		case 'mtr4':
 			utils.mtr4(req.body.target, function(output) {
 				res.json(output);
 			});
-			return;
-		case 'mtr6 ':
+			break;
+		case 'mtr6':
 			utils.mtr6(req.body.target, function(output) {
 				res.json(output);
 			});
-			return;
+			break;
 		case 'bgp':
 			utils.bgp(req.body.target, function(output) {
 				res.json(output);
