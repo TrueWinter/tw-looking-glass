@@ -27,17 +27,20 @@ app.post('/', function(req, res) {
 		return res.status(400).json({ success: false, message: 'Command not allowed' });
 	}
 
+	var commandRequiresSpecificIPVersion = ['4', '6'].includes(req.body.command.charAt(req.body.command.length - 1) !== '4');
+	var commandDoesNotAllowDomains = ['bgp'].includes(req.body.command);
+
 	if (isInSubnet.isIPv4(req.body.target)) {
-		if (req.body.command.charAt(req.body.command.length - 1) != 4) {
+		if (commandRequiresSpecificIPVersion && req.body.command.charAt(req.body.command.length - 1) != 4) {
 			return res.status(400).json({ success: false, message: 'Please use one of the IPv4 commands' });
 		}
 		ipVersion = 4;
 	} else if (isInSubnet.isIPv6(req.body.target)) {
-		if (req.body.command.charAt(req.body.command.length - 1) != 6) {
+		if (commandRequiresSpecificIPVersion && req.body.command.charAt(req.body.command.length - 1) != 6) {
 			return res.status(400).json({ success: false, message: 'Please use one of the IPv6 commands' });
 		}
 		ipVersion = 6;
-	} else if (isValidDomain(req.body.target)) {
+	} else if (!commandDoesNotAllowDomains && isValidDomain(req.body.target)) {
 		// Domain is valid
 	} else {
 		return res.status(400).json({ success: false, message: 'Invalid domain or IP' });
