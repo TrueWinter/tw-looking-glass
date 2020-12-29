@@ -60,17 +60,17 @@ app.post('/', function(req, res) {
 			});
 			return;
 		case 'trace6':
-			utils.mtr4(req.body.target, function(output) {
+			utils.trace6(req.body.target, function(output) {
 				res.json(output);
 			});
 			return;
 		case 'mtr4':
-			utils.mtr6(req.body.target, function(output) {
+			utils.mtr4(req.body.target, function(output) {
 				res.json(output);
 			});
 			return;
 		case 'mtr6 ':
-			utils.trace6(req.body.target, function(output) {
+			utils.mtr6(req.body.target, function(output) {
 				res.json(output);
 			});
 			return;
