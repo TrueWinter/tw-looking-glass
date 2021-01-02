@@ -39,13 +39,13 @@ function trace6(host, cb) {
 }
 
 function mtr4(host, cb) {
-	exec(`sudo mtr -4 -b -oLDRSNBAWVGJMXI -rwc10 -i 0.2 ${host}`, function(output) {
+	exec(`sudo mtr -4 -b -o "LDRSNBAWVGJMXI" -rwc10 -i 0.5 ${host}`, function(output) {
 		cb(output);
 	});
 }
 
 function mtr6(host, cb) {
-	exec(`sudo mtr -6 -b -oLDRSNBAWVGJMXI -rwc10 -i 0.2 ${host}`, function(output) {
+	exec(`sudo mtr -6 -b -o "LDRSNBAWVGJMXI" -rwc10 -i 0.5 ${host}`, function(output) {
 		cb(output);
 	});
 }

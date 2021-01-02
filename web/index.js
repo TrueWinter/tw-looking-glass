@@ -80,11 +80,11 @@ app.post('/process', function(req, res) {
 				return res.status(500).json({ success: false, message: 'Selected router appears to be down' });
 			}
 
-			axios.post(router.api, qs.stringify({
+			axios.post(router.api, {
 				command: req.body.command,
 				target: req.body.target,
 				key: router.key
-			})).then(function (response) {
+			}).then(function (response) {
 				res.json(response.data);
 			}).catch(function (error) {
 				console.log(error);

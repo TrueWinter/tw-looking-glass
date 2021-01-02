@@ -63,6 +63,18 @@
 				return domain.match(re) !== null;
 			}
 
+			// https://stackoverflow.com/a/11339012
+			function getFormData($form){
+				var unindexed_array = $form.serializeArray();
+				var indexed_array = {};
+
+				$.map(unindexed_array, function(n, i){
+					indexed_array[n['name']] = n['value'];
+				});
+
+				return indexed_array;
+			}
+
 			window.addEventListener('load', function() {
 				$('#routerSelection').on('change', function() {
 					$('#commandSelection').empty()
@@ -94,7 +106,7 @@
 						return alert('Invalid target. Please check your target again. Ping and trace commands allow IP and domain targets. The BGP command only allows IP targets.')
 					}
 
-					console.log($(this).serialize());
+					//console.log($(this));
 					
 					$('#submitBtn').attr('disabled', true);
 					$('#loadSpinner').show();
@@ -102,7 +114,7 @@
 					var xhr = new XMLHttpRequest();
 					xhr.open('POST', '/process');
 					xhr.onload = function() {
-						console.log(this.responseText);
+						//console.log(this.responseText);
 						window.outputText = this.responseText;
 						$('#lg-output').show();
 						$('#submitBtn').attr('disabled', false);
@@ -110,8 +122,10 @@
 						$('#lg-output').html(JSON.parse(outputText).message.replace(/\n/g, "<br>"));
 						$('#lg-output').append('<hr>');
 					}
-					xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-					xhr.send($(this).serialize());
+					//xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+					xhr.setRequestHeader("Content-Type", "application/json");
+					xhr.send(JSON.stringify(getFormData($(this))));
+					$('#lg-output').html('');
 				});
 			});
 		</script>
