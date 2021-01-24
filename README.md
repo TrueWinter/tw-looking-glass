@@ -22,14 +22,14 @@ Configure the looking glass web config in `web/config.js`. The followig configur
 	- `trace6`: IPv6 traceroute
 	- `mtr4`: IPv4 MTR
 	- `mtr6`: IPv6 MTR
-	- `bgp`: Runs `show route all...` for an IP address
+	- `show route all (primary)`: Runs `show route all for {target} primary` for an IP address
 
 The agent also has configuration options, and all options are required.
 
 - `key`: A pre-shared key used to prevent direct queries to the agent. This should be the same one as configured in the web config.
 - `allowedCommands`: An array of commands that can be run against this router. This should be the same as configured in the web config.
 
-# Dependencies
+## Dependencies
 
 - `traceroute`
 - `ping`
@@ -37,26 +37,16 @@ The agent also has configuration options, and all options are required.
 - `bird2`
 - `node` v12+
 
-# License
+## Bugs
 
-MIT License
+As with any software, this looking glass may have bugs. If you find any of these, please do open an issue. Ensure that your issue contains enough information to make finding the root cause of the bug easier.
 
-Copyright (c) 2020 Nicholis du Toit
+Please note that the looking glass has only been fully tested on Ubuntu 20.04 and may have slight compatibility issues with other operating systems. Windows and MacOS are not supported and there are currently no plans to add support for these operating systems.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+## Security
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+While I have tried to make the looking glass as secure as I could (by implenenting validation checks wherever possible, using API keys and suggesting a seperate low-privilege user) there may be some security issues. If you do find any security issues, please read my [security policy](https://truewinter.dev/legal/security). **Do not report security issues through GitHub and only test on your own instance(s) of the looking glass**.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+## License
+
+TrueWinter Looking Glass is licensed under the MIT license. See the `LICENSE` file for more information.

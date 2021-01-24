@@ -1,5 +1,4 @@
 var express = require('express');
-var isValidIP = require('is-my-ip-valid')();
 var isValidDomain = require('is-valid-domain');
 var isInSubnet = require('is-in-subnet');
 var morgan = require('morgan');
@@ -21,25 +20,23 @@ app.post('/', function(req, res) {
 		return res.status(400).json({ success: false, message: 'Invalid key' });
 	}
 
-	var ipVersion = 0;
-
 	if (!config.allowedCommands.includes(req.body.command)) {
 		return res.status(400).json({ success: false, message: 'Command not allowed' });
 	}
 
 	var commandRequiresSpecificIPVersion = ['4', '6'].includes(req.body.command.charAt(req.body.command.length - 1) !== '4');
-	var commandDoesNotAllowDomains = ['bgp'].includes(req.body.command);
+	var commandDoesNotAllowDomains = ['show route all (primary)'].includes(req.body.command);
 
 	if (isInSubnet.isIPv4(req.body.target)) {
+		// eslint-disable-next-line eqeqeq
 		if (commandRequiresSpecificIPVersion && req.body.command.charAt(req.body.command.length - 1) != 4) {
 			return res.status(400).json({ success: false, message: 'Please use one of the IPv4 commands' });
 		}
-		ipVersion = 4;
 	} else if (isInSubnet.isIPv6(req.body.target)) {
+		// eslint-disable-next-line eqeqeq
 		if (commandRequiresSpecificIPVersion && req.body.command.charAt(req.body.command.length - 1) != 6) {
 			return res.status(400).json({ success: false, message: 'Please use one of the IPv6 commands' });
 		}
-		ipVersion = 6;
 	} else if (!commandDoesNotAllowDomains && isValidDomain(req.body.target)) {
 		// Domain is valid
 	} else {
@@ -79,8 +76,8 @@ app.post('/', function(req, res) {
 				res.json(output);
 			});
 			break;
-		case 'bgp':
-			utils.bgp(req.body.target, function(output) {
+		case 'show route all (primary)':
+			utils.showRouteAllPrimary(req.body.target, function(output) {
 				res.json(output);
 			});
 			break;

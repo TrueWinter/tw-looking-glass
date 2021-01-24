@@ -1,13 +1,12 @@
 var express = require('express');
+// eslint-disable-next-line no-unused-vars
 var ejs = require('ejs');
-var isValidIP = require('is-my-ip-valid')();
 var isValidDomain = require('is-valid-domain');
 var isInSubnet = require('is-in-subnet');
 var isPortReachable = require('is-port-reachable');
 var url = require('url');
 var path = require('path');
 var axios = require('axios');
-var qs = require('qs');
 var morgan = require('morgan');
 
 var config = require('./config.js');
@@ -41,8 +40,6 @@ app.post('/process', function(req, res) {
 		return res.status(400).json({ success: false, message: 'Required data not in request' });
 	}
 
-	var ipVersion = 0;
-
 	getRouterById(req.body.router, function(err, router) {
 		if (err) {
 			return res.status(400).json({ success: false, message: err.message });
@@ -53,18 +50,16 @@ app.post('/process', function(req, res) {
 		}
 
 		var commandRequiresSpecificIPVersion = ['4', '6'].includes(req.body.command.charAt(req.body.command.length - 1) !== '4');
-		var commandDoesNotAllowDomains = ['bgp'].includes(req.body.command);
+		var commandDoesNotAllowDomains = ['show route all (primary)'].includes(req.body.command);
 
 		if (isInSubnet.isIPv4(req.body.target)) {
 			if (commandRequiresSpecificIPVersion && req.body.command.charAt(req.body.command.length - 1) !== '4') {
 				return res.status(400).json({ success: false, message: 'Please use one of the IPv4 commands' });
 			}
-			ipVersion = 4;
 		} else if (isInSubnet.isIPv6(req.body.target)) {
 			if (commandRequiresSpecificIPVersion && req.body.command.charAt(req.body.command.length - 1) !== '6') {
 				return res.status(400).json({ success: false, message: 'Please use one of the IPv6 commands' });
 			}
-			ipVersion = 6;
 		} else if (!commandDoesNotAllowDomains && isValidDomain(req.body.target)) {
 			// Domain is valid
 		} else {

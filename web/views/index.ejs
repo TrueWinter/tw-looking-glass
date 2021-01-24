@@ -88,7 +88,7 @@
 					var ipVersion = 0;
 
 					var commandRequiresSpecificIPVersion = ['4', '6'].includes($('#commandSelection').val().charAt($('#commandSelection').val().length - 1));
-					var commandDoesNotAllowsDomains = ['bgp'].includes($('#commandSelection').val());
+					var commandDoesNotAllowsDomains = ['show route all (primary)'].includes($('#commandSelection').val());
 					
 					if (isInSubnet.isIPv4($('#target').val())) {
 						if (commandRequiresSpecificIPVersion && $('#commandSelection').val().charAt($('#commandSelection').val().length - 1) != 4) {

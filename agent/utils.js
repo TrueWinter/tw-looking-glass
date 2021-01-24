@@ -39,18 +39,18 @@ function trace6(host, cb) {
 }
 
 function mtr4(host, cb) {
-	exec(`sudo mtr -4 -b -o "LDRSNBAWVGJMXI" -rwc10 -i 0.5 ${host}`, function(output) {
+	exec(`sudo mtr -4 -b -o "LDRSNBAWVGJMXI" -rwc10 ${host}`, function(output) {
 		cb(output);
 	});
 }
 
 function mtr6(host, cb) {
-	exec(`sudo mtr -6 -b -o "LDRSNBAWVGJMXI" -rwc10 -i 0.5 ${host}`, function(output) {
+	exec(`sudo mtr -6 -b -o "LDRSNBAWVGJMXI" -rwc10 ${host}`, function(output) {
 		cb(output);
 	});
 }
 
-function bgp(target, cb) {
+function showRouteAllPrimary(target, cb) {
 	exec(`sudo birdc -r 'show route all for ${target} primary'`, function(output) {
 		cb(output);
 	});
@@ -62,4 +62,4 @@ module.exports.trace4 = trace4;
 module.exports.trace6 = trace6;
 module.exports.mtr4 = mtr4;
 module.exports.mtr6 = mtr6;
-module.exports.bgp = bgp;
+module.exports.showRouteAllPrimary = showRouteAllPrimary;
