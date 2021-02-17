@@ -11,8 +11,10 @@ Configure the looking glass web config in `web/config.js`. The followig configur
 - `ui.networkName`: The network name shown on the looking glass
 - `ui.email`: An email address where people can contact you
 - `ui.website`: A link to your main network website, or any other website you'd want linked here
+- `ui.description`: An optional short description of the network. HTML is supported here
+- `ui.asn`: The network ASN
 - `agents[n].name`: The name for this router. This will be shown in the dropdown list
-- `agents[n].id`: A unique ID for this router. This will be used internally for queries.
+- `agents[n].id`: A unique ID for this router. This will be used internally for queries
 - `agents[n].api`: The URL to the looking glass agent for this router
 - `agents[n].key`: A pre-shared key used to prevent direct queries to the agent
 - `agents[n].allowedCommands`: An array of commands that can be run against this router. Currently implemented commands are:
@@ -28,6 +30,11 @@ The agent also has configuration options, and all options are required.
 
 - `key`: A pre-shared key used to prevent direct queries to the agent. This should be the same one as configured in the web config.
 - `allowedCommands`: An array of commands that can be run against this router. This should be the same as configured in the web config.
+
+The following ports are used for the looking glass, and cannot currently be changed:
+
+- 18087: Used by the agent to receive requests from the web app.
+- 18088: Used by the web app to show the looking glass. This is the port you want your web server to proxy requests to.
 
 ## Dependencies
 

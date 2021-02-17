@@ -9,8 +9,15 @@
 	<body>
 		<div class="container">
 			<h1><%= config.ui.networkName %> Looking Glass</h1>
-			<p>Email: <%= config.ui.email %></p>
-			<p>Website: <a href="<%= config.ui.website %>" target="_blank"><%= config.ui.website %></a></p>
+			<% if (config.ui.description) { %>
+				<p><%- config.ui.description %></p>
+			<% } %>
+			<%# ASN is only optional here to prevent breaking older installations of the looking glass %>
+			<% if (config.ui.asn) { %>
+				<div>ASN: <%= config.ui.asn %></div>
+			<% } %>
+			<div>Email: <%= config.ui.email %></div>
+			<div>Website: <a href="<%= config.ui.website %>" target="_blank"><%= config.ui.website %></a></div>
 			<hr>
 			<div class="lg-input">
 				<form class="form-inline" id="lg-form" autocomplete="off">
