@@ -51,6 +51,7 @@ app.post('/process', function(req, res) {
 
 		var commandRequiresSpecificIPVersion = ['4', '6'].includes(req.body.command.charAt(req.body.command.length - 1) !== '4');
 		var commandDoesNotAllowDomains = ['show route all (primary)'].includes(req.body.command);
+		var commandAllowsSingleTextString = ['show protocols (list)', 'show protocols all'].includes(req.body.command);
 
 		if (isInSubnet.isIPv4(req.body.target)) {
 			if (commandRequiresSpecificIPVersion && req.body.command.charAt(req.body.command.length - 1) !== '4') {
@@ -62,6 +63,8 @@ app.post('/process', function(req, res) {
 			}
 		} else if (!commandDoesNotAllowDomains && isValidDomain(req.body.target)) {
 			// Domain is valid
+		} else if (commandAllowsSingleTextString && req.body.target.match(/^[a-zA-Z0-9-_]+$/)) {
+			// Target is valid
 		} else {
 			return res.status(400).json({ success: false, message: 'Invalid target. Please check your target again. Ping and trace commands allow IP and domain targets. The BGP command only allows IP targets.' });
 		}

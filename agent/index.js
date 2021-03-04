@@ -26,6 +26,7 @@ app.post('/', function(req, res) {
 
 	var commandRequiresSpecificIPVersion = ['4', '6'].includes(req.body.command.charAt(req.body.command.length - 1) !== '4');
 	var commandDoesNotAllowDomains = ['show route all (primary)'].includes(req.body.command);
+	var commandAllowsSingleTextString = ['show protocols (list)', 'show protocols all'].includes(req.body.command);
 
 	if (isInSubnet.isIPv4(req.body.target)) {
 		// eslint-disable-next-line eqeqeq
@@ -39,8 +40,10 @@ app.post('/', function(req, res) {
 		}
 	} else if (!commandDoesNotAllowDomains && isValidDomain(req.body.target)) {
 		// Domain is valid
+	} else if (commandAllowsSingleTextString && req.body.target.match(/^[a-zA-Z0-9-_]+$/)) {
+		// Target is valid
 	} else {
-		return res.status(400).json({ success: false, message: 'Invalid domain or IP' });
+		return res.status(400).json({ success: false, message: 'Invalid target' });
 	}
 
 	console.log(`Running ${req.body.command}. Target: ${req.body.target}`);
@@ -78,6 +81,16 @@ app.post('/', function(req, res) {
 			break;
 		case 'show route all (primary)':
 			utils.showRouteAllPrimary(req.body.target, function(output) {
+				res.json(output);
+			});
+			break;
+		case 'show protocols (list)':
+			utils.showPeerProtocolsList(function(output) {
+				res.json(output);
+			});
+			break;
+		case 'show protocols all':
+			utils.showPeerProtocolAll(req.body.target, function(output) {
 				res.json(output);
 			});
 			break;

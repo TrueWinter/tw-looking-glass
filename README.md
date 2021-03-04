@@ -25,6 +25,8 @@ Configure the looking glass web config in `web/config.js`. The followig configur
 	- `mtr4`: IPv4 MTR
 	- `mtr6`: IPv6 MTR
 	- `show route all (primary)`: Runs `show route all for {target} primary` for an IP address
+	- `show protocols (list)`: Will list all configured BGP protocols
+	- `show protocols all`: Runs `show protocols all {target}`
 
 The agent also has configuration options, and all options are required.
 

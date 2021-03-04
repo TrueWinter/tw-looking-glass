@@ -56,6 +56,18 @@ function showRouteAllPrimary(target, cb) {
 	});
 }
 
+function showPeerProtocolsList(cb) {
+	exec(`sudo birdc -r 'show protocols' | grep BGP`, function(output) {
+		cb(output);
+	});
+}
+
+function showPeerProtocolAll(target, cb) {
+	exec(`sudo birdc -r 'show protocols all ${target}'`, function(output) {
+		cb(output);
+	});
+}
+
 module.exports.ping4 = ping4;
 module.exports.ping6 = ping6;
 module.exports.trace4 = trace4;
@@ -63,3 +75,5 @@ module.exports.trace6 = trace6;
 module.exports.mtr4 = mtr4;
 module.exports.mtr6 = mtr6;
 module.exports.showRouteAllPrimary = showRouteAllPrimary;
+module.exports.showPeerProtocolsList = showPeerProtocolsList;
+module.exports.showPeerProtocolAll = showPeerProtocolAll;

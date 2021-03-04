@@ -70,10 +70,19 @@
 				return domain.match(re) !== null;
 			}
 
+			var showProtocolsListSelected = false;
+
 			// https://stackoverflow.com/a/11339012
-			function getFormData($form){
+			function getFormData($form) {
+				if (showProtocolsListSelected) {
+					$('#target').removeAttr('disabled');
+				}
 				var unindexed_array = $form.serializeArray();
 				var indexed_array = {};
+
+				if (showProtocolsListSelected) {
+					$('#target').attr('disabled', true);
+				}
 
 				$.map(unindexed_array, function(n, i){
 					indexed_array[n['name']] = n['value'];
@@ -90,12 +99,25 @@
 					});
 				});
 
+				$('#commandSelection').on('change', function() {
+					if ($('#commandSelection').val() === 'show protocols (list)') {
+						showProtocolsListSelected = true;
+						$('#target').val('-');
+						$('#target').attr('disabled', true);
+					} else if (showProtocolsListSelected) {
+						showProtocolsListSelected = false;
+						$('#target').val('');
+						$('#target').removeAttr('disabled');
+					}
+				});
+
 				$('#lg-form').on('submit', function(e) {
 					e.preventDefault();
 					var ipVersion = 0;
 
 					var commandRequiresSpecificIPVersion = ['4', '6'].includes($('#commandSelection').val().charAt($('#commandSelection').val().length - 1));
 					var commandDoesNotAllowsDomains = ['show route all (primary)'].includes($('#commandSelection').val());
+					var commandAllowsSingleTextString = ['show protocols (list)', 'show protocols all'].includes($('#commandSelection').val());
 					
 					if (isInSubnet.isIPv4($('#target').val())) {
 						if (commandRequiresSpecificIPVersion && $('#commandSelection').val().charAt($('#commandSelection').val().length - 1) != 4) {
@@ -108,9 +130,11 @@
 						}
 						ipVersion = 6;
 					} else if (!commandDoesNotAllowsDomains && isValidDomain($('#target').val())) {
-						
+						// Domain is valid
+					} else if (commandAllowsSingleTextString && $('#target').val().match(/^[a-zA-Z0-9-_]+$/)) {
+						// Target is valid
 					} else {
-						return alert('Invalid target. Please check your target again. Ping and trace commands allow IP and domain targets. The BGP command only allows IP targets.')
+						return alert(`Invalid target. Please check your target again.\n- Ping and trace commands allow IP and domain targets\n- The 'show route' commmand only allows IP addresses\n- The 'show protocols all' command only allows protocol names`);
 					}
 
 					//console.log($(this));
