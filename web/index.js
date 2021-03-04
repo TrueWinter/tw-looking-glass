@@ -84,7 +84,7 @@ app.post('/process', function(req, res) {
 				key: router.key
 			}).then(function (response) {
 				var responseData = response.data;
-				response.data.message = response.data.message.replace(/^(?:(?![\r\n\t])\s)/gm, '<span class="tab"></span>').replace(/\n/gm, '<br>').replace(/\s{2,}/gm, '<span class="tab"></span>');
+				response.data.message = response.data.message.replace(/^(?:(?![\r\n\t])\s)/gm, '<span class="tab"></span>').replace(/\n/gm, '<br>').replace(/\s{2,}/gm, '<span class="tab"></span>').replace(/\t/gm, '<span class="tab"></span>');
 				res.json(responseData);
 			}).catch(function (error) {
 				console.log(error);
