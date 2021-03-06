@@ -48,8 +48,7 @@
 				</form>
 			</div>
 			<hr>
-			<div id="lg-output">
-			</div>
+			<pre id="lg-output"></pre>
 			<div class="footer">
 				<% // Please don't remove the credit notice in the footer. You may ADD your name in here if you modify the code, but do not remove my name %>
 				<p>Looking Glass made by <a href="https://truewinter.dev" target="_blank">TrueWinter</a>. Source code available on <a href="https://github.com/TrueWinter/tw-looking-glass">GitHub</a>.</p>
@@ -97,6 +96,11 @@
 					routers[$('#routerSelection').val()].allowedCommands.forEach(function(command) {
 						$('#commandSelection').append($("<option></option>").attr("value", command).text(command));
 					});
+					if ($('#target').val() === '-') {
+						showProtocolsListSelected = false;
+						$('#target').val('');
+						$('#target').removeAttr('disabled');
+					}
 				});
 
 				$('#commandSelection').on('change', function() {
@@ -150,7 +154,8 @@
 						$('#lg-output').show();
 						$('#submitBtn').attr('disabled', false);
 						$('#loadSpinner').hide();
-						$('#lg-output').html(JSON.parse(outputText).message.replace(/\n/g, "<br>"));
+						//$('#lg-output').html(JSON.parse(outputText).message.replace(/\n/g, "<br>"));
+						$('#lg-output').html(JSON.parse(outputText).message);
 						$('#lg-output').append('<hr>');
 					}
 					//xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
