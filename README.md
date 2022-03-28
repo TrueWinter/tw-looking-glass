@@ -15,7 +15,7 @@ Configure the looking glass web config in `web/config.js`. The followig configur
 - `ui.asn`: The network ASN
 - `agents[n].name`: The name for this router. This will be shown in the dropdown list
 - `agents[n].id`: A unique ID for this router. This will be used internally for queries
-- `agents[n].api`: The URL to the looking glass agent for this router
+- `agents[n].api`: The URL to the looking glass agent for this router (e.g. `http://10.120.0.5:18087/`)
 - `agents[n].key`: A pre-shared key used to prevent direct queries to the agent
 - `agents[n].allowedCommands`: An array of commands that can be run against this router. Currently implemented commands are:
 	- `ping4`: Ping to an IPv4 IP or domain
