@@ -27,13 +27,13 @@ function ping6(host, cb) {
 }
 
 function trace4(host, cb) {
-	exec(`sudo traceroute -I -4 -w 2 -q 1 ${host}`, function(output) {
+	exec(`sudo traceroute -I -4 -N 1 -w 2 -q 1 ${host}`, function(output) {
 		cb(output);
 	});
 }
 
 function trace6(host, cb) {
-	exec(`sudo traceroute -I -6 -w 2 -q 1 ${host}`, function(output) {
+	exec(`sudo traceroute -I -6 -N 1 -w 2 -q 1 ${host}`, function(output) {
 		cb(output);
 	});
 }
